@@ -19,7 +19,7 @@ public class BlockRegistryMixin {
                     to = @At(value = "CONSTANT", args = "stringValue=poppy")
             ))
     private static BlockBehaviour.Properties torchflowerBlockLightLevel(BlockBehaviour.Properties properties) {
-        return properties.lightLevel(blockState -> 15);
+        return properties.lightLevel(blockState -> 10);
     }
 
     //Only one torchflowercrop constructor, so no slice necessary
@@ -28,7 +28,7 @@ public class BlockRegistryMixin {
                     target = "Lnet/minecraft/world/level/block/TorchflowerCropBlock;<init>(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V")
     )
     private static BlockBehaviour.Properties torchflowerCropBlockLightLevel(BlockBehaviour.Properties properties) {
-        return properties.lightLevel(blockState -> blockState.getValue(TorchflowerCropBlock.AGE) * 5);
+        return properties.lightLevel(blockState -> blockState.getValue(TorchflowerCropBlock.AGE) * 3);
     }
 
     @ModifyArg(method = "flowerPot(Lnet/minecraft/world/level/block/Block;[Lnet/minecraft/world/flag/FeatureFlag;)Lnet/minecraft/world/level/block/FlowerPotBlock;",
@@ -36,6 +36,6 @@ public class BlockRegistryMixin {
                     target = "Lnet/minecraft/world/level/block/FlowerPotBlock;<init>(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V")
     )
     private static BlockBehaviour.Properties torchflowerPotLightLevel(Block block, BlockBehaviour.Properties properties) {
-        return block.equals(Blocks.TORCHFLOWER) ? properties.lightLevel(blockState -> 15) : properties;
+        return block.equals(Blocks.TORCHFLOWER) ? properties.lightLevel(blockState -> 10) : properties;
     }
 }
