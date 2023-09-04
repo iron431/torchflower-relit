@@ -9,11 +9,6 @@ import org.spongepowered.asm.mixin.injection.*;
 
 @Mixin(Blocks.class)
 public class BlockRegistryMixin {
-    //    @Redirect(method="<init>",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;of()Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;"))
-//    BlockBehaviour.Properties redirect(){
-//        return null;
-//    }
-//    @ModifyConstant(method="<clinit>", constant = @Constant())
     //https://fabricmc.net/wiki/tutorial:mixin_examples#injecting_with_a_slice
     @ModifyArg(method = "<clinit>",
             at = @At(value = "INVOKE",
@@ -26,4 +21,20 @@ public class BlockRegistryMixin {
         return properties.lightLevel(blockState -> 15);
     }
 
+    //Only one torchflowercrop constructor, so no slice necessary
+    @ModifyArg(method = "<clinit>",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/TorchflowerCropBlock;<init>(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V")
+    )
+    private static BlockBehaviour.Properties torchflowerCropBlockLightLevel(BlockBehaviour.Properties properties) {
+        return properties.lightLevel(blockState -> blockState.getValue(TorchflowerCropBlock.AGE) * 5);
+    }
+
+    @ModifyArg(method = "flowerPot(Lnet/minecraft/world/level/block/Block;[Lnet/minecraft/world/flag/FeatureFlag;)Lnet/minecraft/world/level/block/FlowerPotBlock;",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/FlowerPotBlock;<init>(Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V")
+    )
+    private static BlockBehaviour.Properties torchflowerPotLightLevel(Block block, BlockBehaviour.Properties properties) {
+        return block.equals(Blocks.TORCHFLOWER) ? properties.lightLevel(blockState -> 15) : properties;
+    }
 }
